@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angular</title>
+  </head>
+  <body>
+    <h1>Angular</h1>
+    <div id="mario"></div>
+    <script>
+      fetch("/api/v2/mario")
+        .then((j) => j.json())
+        .then((mario) => {
+          setTimeout(
+            () => (document.getElementById("mario").innerHTML = mario.cognome),
+            5000
+          );
+        });
+    </script>
+  </body>
+</html>

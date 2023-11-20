@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 const port = 3000;
 const host = "localhost";
 
-const reqList = (req: IncomingMessage, res: ServerResponse) => {
+const requestListener = (req: IncomingMessage, res: ServerResponse) => {
     const u = url.parse(req.url!, true);
     // console.log(u);
     // const queryString = u.query;
@@ -15,7 +15,7 @@ const reqList = (req: IncomingMessage, res: ServerResponse) => {
     // res.end();
 
     try {
-        console.log(u.pathname);
+        // console.log(u.pathname);
         switch (u.pathname) {
             case "/":
                 res.writeHead(200, { "Content-Type": "text/html" });
@@ -27,6 +27,19 @@ const reqList = (req: IncomingMessage, res: ServerResponse) => {
                 let html = readFileSync("./templates/welcome.html", { encoding: "utf8" });
                 res.write(html.replace("{{name}}", nome ?? "pippo"));
                 res.end();
+                break;
+            case "/api/v2/mario":
+                const mario = {
+                    nome: "Mario",
+                    cognome: "Verdi"
+                }
+
+                res.writeHead(200, { "Content-Type": "application/json" })
+                res.end(JSON.stringify(mario, null, 2));
+                break;
+            case "/ng":
+                res.writeHead(200, { "Content-Type": "text/html" });
+                res.end(readFileSync("./templates/index.html", { encoding: "utf8" }));
                 break;
             default:
                 res.writeHead(404);
@@ -41,7 +54,7 @@ const reqList = (req: IncomingMessage, res: ServerResponse) => {
 }
 
 // creo il server
-const server = createServer(reqList);
+const server = createServer(requestListener);
 
 // do vita al server
 server.listen(port, host, () => console.log(`Server in ascolto su http://${host}:${port}`));
